@@ -1,10 +1,10 @@
 pipeline {
     //agent any
     agent {
-    kubernetes {
-      label 'strata-jenkins-slave'
-      defaultContainer 'jnlp'
-      yaml """
+        kubernetes {
+            label 'heroku-app-ci'
+            defaultContainer 'jnlp'
+            yaml """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -13,11 +13,11 @@ metadata:
   spec:
     containers:
     - name: maven
-      image: maven
+      image: maven:alpine
       command:
       - cat
       tty: true
-      - name: heroku-build
+    - name: heroku-build
       image: gcr.io/core-1-190918/heroku-app-demo
       command:
       - cat
