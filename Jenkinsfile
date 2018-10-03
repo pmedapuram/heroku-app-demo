@@ -4,7 +4,25 @@ pipeline {
     kubernetes {
       label 'strata-jenkins-slave'
       defaultContainer 'jnlp'
-      yaml 'BuildContainerConfig.yaml'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: some-label-value
+  spec:
+    containers:
+    - name: maven
+      image: maven
+      command:
+      - cat
+      tty: true
+      - name: heroku-build
+      image: gcr.io/core-1-190918/heroku-app-demo
+      command:
+      - cat
+      tty: true
+"""
     }
   }
 
