@@ -25,7 +25,7 @@ spec:
     }
   }
   options { timestamps() }
-  
+
   stages {
     stage('Init') {
         steps {
@@ -45,7 +45,9 @@ spec:
 
     stage('Slug Add Artifacts') {
         steps{
-            echo 'Hello'
+            container('dev-heroku') {
+                entrypoint slug_add_artifacts target/*.jar
+            }
         }
     }
   }
