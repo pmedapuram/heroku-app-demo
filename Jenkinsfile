@@ -24,6 +24,8 @@ spec:
 """
     }
   }
+  options { timestamps() }
+  
   stages {
     stage('Init') {
         steps {
