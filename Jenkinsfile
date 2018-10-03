@@ -32,7 +32,7 @@ spec:
             checkout scm
         }
     }
-    stage('Run maven') {
+    stage('Build and Test') {
         steps {
             container('maven') {
                 sh """mvn --batch-mode --fail-at-end --strict-checksums --update-snapshots \
@@ -46,6 +46,8 @@ spec:
     stage('Slug Add Artifacts') {
         steps{
             container('dev-heroku') {
+                sh 'pwd'
+                sh 'ls ltra'
                 sh 'entrypoint slug_add_artifacts target/*.jar'
             }
         }
