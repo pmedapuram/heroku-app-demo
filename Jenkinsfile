@@ -1,5 +1,12 @@
 pipeline {
-    agent any
+    //agent any
+    agent {
+    kubernetes {
+      label 'strata-jenkins-slave'
+      defaultContainer 'jnlp'
+      yaml 'BuildContainerConfig.yaml'
+    }
+  }
 
     stages {
         stage('Init') {
@@ -9,7 +16,9 @@ pipeline {
         }
         stage('Example Build') {
             steps {
-                sh 'mvn clean install'
+                containers('maven') {
+                    sh 'mvn clean install'
+                }
             }
         }
     }
