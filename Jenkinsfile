@@ -16,8 +16,8 @@ spec:
     command:
     - cat
     tty: true
-  - name: busybox
-    image: busybox
+  - name: dev-heroku
+    image: gcr.io/core-1-190918/heroku-app-demo:latest
     command:
     - cat
     tty: true
@@ -31,14 +31,20 @@ spec:
         }
     }
     stage('Run maven') {
-      steps {
-        container('maven') {
-          sh """mvn --batch-mode --fail-at-end --strict-checksums --update-snapshots \
-              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-              clean install
-          """
+        steps {
+            container('maven') {
+                sh """mvn --batch-mode --fail-at-end --strict-checksums --update-snapshots \
+                    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                    clean install
+                    """
+            }
         }
-      }
+    }
+
+    stage('Slug Add Artifacts') {
+        steps{
+            echo 'Hello'
+        }
     }
   }
 }
