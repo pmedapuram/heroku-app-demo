@@ -34,7 +34,7 @@ metadata:
         }
         stage('Example Build') {
             steps {
-                containers('maven') {
+                container('maven') {
                     sh 'mvn clean install'
                 }
             }
