@@ -46,7 +46,7 @@ spec:
     stage('Slug Add Artifacts') {
         steps{
             container('dev-heroku') {
-                entrypoint slug_add_artifacts target/*.jar
+                sh 'entrypoint slug_add_artifacts target/*.jar'
             }
         }
     }
