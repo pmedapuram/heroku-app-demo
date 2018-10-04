@@ -27,11 +27,6 @@ spec:
   options { timestamps() }
 
   stages {
-    stage('Init') {
-        steps {
-            checkout scm
-        }
-    }
     stage('Build and Test') {
         steps {
             container('maven') {
@@ -54,16 +49,30 @@ spec:
     stage('Slug create') {
         environment {
             HEROKU_KEY = credentials('pavan-heroku-token')
+            GITHUB = credentials('pavan-github-token')
         }
         steps{
             container('dev-heroku') {
                 script {
+                    def branchName = 'deployment_2133'
                     def appNames = []
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deployment/staging/oregon/heroku.json']).trim()
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deployment/production/oregon/heroku.json']).trim()
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
                     sh "entrypoint slug_create --app-names ${appNames[0]} --token ${env.HEROKU_KEY} --deploy-dir deployment/staging/oregon"
                     sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deployment/production/oregon"
+
+                    def netrcPath='~/.netrc'
+
+                    sh """
+                      if [[ ! -e ${netrcPath} || \$(grep -qv 'machine github.com' ${netrcPath})  -eq 0 ]]; then
+                          echo '\nmachine github.com' >> ${netrcPath}
+                          echo 'login ${env.GITHUB_USR}' >> ${netrcPath}
+                          echo 'password ${env.GITHUB_PSW}' >> ${netrcPath}
+                      fi
+                    """
+                    sh "git commit -am 'modify slug-id'"
+                    sh "git checkout -b ${branchName}"
                 }
             }
         }
