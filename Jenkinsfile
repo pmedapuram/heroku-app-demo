@@ -57,9 +57,14 @@ spec:
         }
         steps{
             container('dev-heroku') {
-                def appNames = []
-                appNames = sh('echo hello')
-                //sh 'entrypoint slug_create target/*.jar'
+                script {
+                    def appNames = []
+                    appNames << dsl.sh([returnStdout: true, script: 'jq \'.app_name\' deployment/staging/oregon/heroku.json']).trim()
+                    appNames << dsl.sh([returnStdout: true, script: 'jq \'.app_name\' deployment/production/oregon/heroku.json']).trim()
+                    echo "The appNames are ${appNames[0]} and ${appNames[1]}"
+                    //sh 'entrypoint slug_create target/*.jar'
+                }
+
             }
         }
     }
