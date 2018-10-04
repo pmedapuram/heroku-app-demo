@@ -43,7 +43,7 @@ spec:
         }
     }
 
-    stage('Slug Add Artifacts') {
+    stage('Add artifacts to slug') {
         steps{
             container('dev-heroku') {
                 sh 'entrypoint slug_add_artifacts target/*.jar'
@@ -51,14 +51,15 @@ spec:
         }
     }
 
-    stage('Slug Compile with Buildpacks') {
+    stage('Slug create') {
         environment {
             HEROKU_KEY = credentials('pavan-heroku-token')
         }
         steps{
             container('dev-heroku') {
-                sh 'printenv'
-                //sh 'entrypoint slug_add_artifacts target/*.jar'
+                def appNames = []
+                appNames = sh('echo hello')
+                //sh 'entrypoint slug_create target/*.jar'
             }
         }
     }
