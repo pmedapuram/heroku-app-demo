@@ -65,12 +65,12 @@ spec:
                     def netrcPath='~/.netrc'
 
                     sh """
-                      if [[ ! -e ${netrcPath} || \$(grep -qv 'machine github.com' ${netrcPath})  -eq 0 ]]; then
                           echo '\nmachine github.com' >> ${netrcPath}
                           echo 'login ${env.GITHUB_USR}' >> ${netrcPath}
                           echo 'password ${env.GITHUB_PSW}' >> ${netrcPath}
-                      fi
                     """
+                    sh "git config --global user.name ${env.GITHUB_USR}"
+                    sh "git config --global user.email pmedapuram@salesforce.com"
                     sh "git commit -am 'modify slug-id'"
                     sh "git checkout -b ${branchName}"
                 }
