@@ -46,11 +46,22 @@ spec:
     stage('Slug Add Artifacts') {
         steps{
             container('dev-heroku') {
-                sh 'pwd'
-                sh 'ls ltra'
                 sh 'entrypoint slug_add_artifacts target/*.jar'
             }
         }
     }
+
+    stage('Slug Compile with Buildpacks') {
+        environment {
+            HEROKU_KEY = credentials('pavan-heroku-token')
+        }
+        steps{
+            container('dev-heroku') {
+                sh 'printenv'
+                //sh 'entrypoint slug_add_artifacts target/*.jar'
+            }
+        }
+    }
+
   }
 }
