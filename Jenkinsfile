@@ -74,10 +74,7 @@ spec:
                     sh "git config --global user.email pmedapuram@salesforce.com"
                     sh "git commit -am 'modify slug-id'"
                     sh "git checkout -b ${branchName} && git push origin ${branchName}"
-                    sh """/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} /
-                        --org pmedapuram --repo heroku-app-demo
-                        --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\"
-                        """
+                    sh "/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} --org pmedapuram --repo heroku-app-demo --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\""
                 }
             }
         }
