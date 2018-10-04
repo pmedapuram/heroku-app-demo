@@ -72,7 +72,7 @@ spec:
                     sh "git config --global user.name ${env.GITHUB_USR}"
                     sh "git config --global user.email pmedapuram@salesforce.com"
                     sh "git commit -am 'modify slug-id'"
-                    sh "git checkout -b ${branchName}"
+                    sh "git checkout -b ${branchName} && git push origin ${branchName}"
                 }
             }
         }
