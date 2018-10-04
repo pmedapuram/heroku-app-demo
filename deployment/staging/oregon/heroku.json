@@ -1,3 +1,5 @@
 {
-	"app_name": "app-spinnaker-demo-staging"
+	"app_name": "app-spinnaker-demo-staging",
+	"slug_id": "5341c574-6b08-48f2-b274-0018b5baddaf",
+	"upload_url": "https://space-2b606356-ad90-44ce-a665-f8dc3691b003-slugs.s3.us-west-2.amazonaws.com/5341c574-6b08-48f2-b274-0018b5baddaf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAQEGJOWRJOJIHZMJ3%2F20181004%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20181004T230110Z&X-Amz-Expires=3600&X-Amz-Security-Token=FQoGZXIvYXdzECgaDEPEkgCjnlCYgL3P4iK3A8mklf%2BgE706TaBA8mbkG9t%2BziUdglI02g2rSOi5d3QkVLiIPzGAotGzNK1X4vzYtSQBiHlqJs2NSly2dzcohlm%2B2sc3FqeaO9EB5AWLbB3BHLkKK%2BgsHxffLoFAfVry4cpYkMXN3%2B0HRfEzLBJncH6ekwHyNOqH61cC6mW%2BJKnN70VZC5tUshdfZBAq%2BLRY1jlr%2FebWe57vb2ca4thd8AvmAhrZwEeeO%2Fvx%2FPlYyv0lcooEBTyo2t3B6KrilpVuJ8i7owaPNSSzwvUxubG5%2F8N4QX9F%2FP7bPmaqMc3KcOm9tN9BCYU1lMSEhVm1oQpleC6BiVo2yhDXUgIoPMOFTNz1Fkpfv5JGYp5d4G%2FMRiaAZLT9TbfS1pOMXK3%2BNz7xYHp9jrXYODWuwqoFZSqLneN2O9FtuFxWGyHx0NXaMrPaU%2BTY24fSNMVGos8iIiwRjc%2Birwc72PZMvPNJHKHAXw%2By00KSTjD1%2BAweO6iyZA1i9Dhr0GITQQNNETk3kWEK%2F0Dopcp6Xe8nm12pa%2FZXaLHJiKuZM2cwVOiOwZ856ZdTyy8OVVTFQrSDOW6eHMTxfgPL3gK85kAota7a3QU%3D&X-Amz-SignedHeaders=host&X-Amz-Signature=9a48ea5072704536cc8da109506caf12302208b1b8b66968f7cc90a7200c0205"
 }
