@@ -80,5 +80,34 @@ spec:
         }
     }
 
+    stage('Slug Upload') {
+        environment {
+            HEROKU_API_KEY = credentials('pavan-heroku-token')
+        }
+        steps{
+            container('dev-heroku') {
+                script {
+                    echo "Uploading the slug for staging-oregon"
+                    def pathToJson = 'deployment/staging/oregon/heroku.json'
+                    def tarball = "${env.WORKSPACE}/slug.tgz"
+                    def slugUploadUrl = sh([returnStdout: true, script: "jq --raw-output '.upload_url' ${pathToJson}"]).trim()
+                    sh """
+                      curl --fail \
+                      --connect-timeout 5 \
+                      --max-time 60 \
+                      --retry 3 \
+                      --retry-delay 0 \
+                      --retry-max-time 300 \
+                      -X PUT \
+                      -H "Content-Type:" \
+                      --data-binary @${tarball} \
+                      -n "${slugUploadUrl}"
+                      """
+                }
+            }
+
+        }
+    }
+
   }
 }
