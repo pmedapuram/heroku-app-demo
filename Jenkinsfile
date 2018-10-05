@@ -54,11 +54,13 @@ spec:
         steps{
             container('dev-heroku') {
                 script {
-                    def timestamp = sh([returnStdout: true, script: "date +%s"]).trim()
-                    def branchName = "Deployment_${timestamp}"
+                    //def timestamp = sh([returnStdout: true, script: "date +%s"]).trim()
+                    //def branchName = "Deployment_${timestamp}"
+                    def deployCloneUrl = "https://github.com/spindemo/deploy-manifest.git"
+                    sh "git clone ${deployCloneUrl}"
                     def appNames = []
-                    appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deployment/staging/oregon/heroku.json']).trim()
-                    appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deployment/production/oregon/heroku.json']).trim()
+                    appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/staging/oregon/heroku.json']).trim()
+                    appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/production/oregon/heroku.json']).trim()
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
                     sh "entrypoint slug_create --app-names ${appNames[0]} --token ${env.HEROKU_KEY} --deploy-dir deployment/staging/oregon"
                     sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deployment/production/oregon"
@@ -72,9 +74,14 @@ spec:
                     """
                     sh "git config --global user.name ${env.GITHUB_USR}"
                     sh "git config --global user.email pmedapuram@salesforce.com"
-                    sh "git commit -am 'modify slug-id'"
-                    sh "git checkout -b ${branchName} && git push origin ${branchName}"
-                    sh "/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} --org pmedapuram --repo heroku-app-demo --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\""
+
+                    dir('deploy-manifest') {
+                        sh "git commit -am 'intiate deployment'"
+                        sh "git push origin master"
+                    }
+                    //sh "git commit -am 'modify slug-id'"
+                    //sh "git checkout -b ${branchName} && git push origin ${branchName}"
+                    //sh "/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} --org pmedapuram --repo heroku-app-demo --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\""
                 }
             }
         }
@@ -88,7 +95,7 @@ spec:
             container('dev-heroku') {
                 script {
                     echo "Uploading the slug for staging-oregon"
-                    def pathToJson = 'deployment/staging/oregon/heroku.json'
+                    def pathToJson = 'deploy-manifest/heroku-app-demo/staging/oregon/heroku.json'
                     def tarball = "${env.WORKSPACE}/slug.tgz"
                     def slugUploadUrl = sh([returnStdout: true, script: "jq --raw-output '.upload_url' ${pathToJson}"]).trim()
                     sh """
@@ -103,6 +110,23 @@ spec:
                       --data-binary @${tarball} \
                       -n "${slugUploadUrl}"
                       """
+
+                      echo "Uploading the slug for production-oregon"
+                      def pathToJson = 'deploy-manifest/heroku-app-demo/production/oregon/heroku.json'
+                      def tarball = "${env.WORKSPACE}/slug.tgz"
+                      def slugUploadUrl = sh([returnStdout: true, script: "jq --raw-output '.upload_url' ${pathToJson}"]).trim()
+                      sh """
+                        curl --fail \
+                        --connect-timeout 5 \
+                        --max-time 60 \
+                        --retry 3 \
+                        --retry-delay 0 \
+                        --retry-max-time 300 \
+                        -X PUT \
+                        -H "Content-Type:" \
+                        --data-binary @${tarball} \
+                        -n "${slugUploadUrl}"
+                        """
                 }
             }
 
