@@ -112,9 +112,8 @@ spec:
                       """
 
                       echo "Uploading the slug for production-oregon"
-                      def pathToJson = 'deploy-manifest/heroku-app-demo/production/oregon/heroku.json'
-                      def tarball = "${env.WORKSPACE}/slug.tgz"
-                      def slugUploadUrl = sh([returnStdout: true, script: "jq --raw-output '.upload_url' ${pathToJson}"]).trim()
+                      pathToJson = 'deploy-manifest/heroku-app-demo/production/oregon/heroku.json'
+                      slugUploadUrl = sh([returnStdout: true, script: "jq --raw-output '.upload_url' ${pathToJson}"]).trim()
                       sh """
                         curl --fail \
                         --connect-timeout 5 \
