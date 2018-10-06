@@ -48,7 +48,7 @@ spec:
               script {
 
 
-                sh 'entrypoint slug_add_artifacts target/*.jar'
+                sh 'entrypoint slug_add_artifacts target/java-getting-started-1.0.jar'
                 def deployCloneUrl = "https://github.com/spindemo/deploy-manifest.git"
                     sh "git clone ${deployCloneUrl}"
                     def appNames = []
