@@ -29,7 +29,7 @@ spec:
   stages {
     stage('Build and Test') {
         steps {
-            container('maven') {
+            container('dev-heroku') {
                 sh """mvn --batch-mode --fail-at-end --strict-checksums --update-snapshots \
                     -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
                     clean install
