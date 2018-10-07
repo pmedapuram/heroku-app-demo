@@ -47,7 +47,7 @@ spec:
             container('dev-heroku') {
               script {
 
-
+                def commit = sh([returnStdout: true, script: 'git rev-parse --short HEAD']).trim()
                 sh 'entrypoint slug_add_artifacts target/java-getting-started-1.0.jar'
                 def deployCloneUrl = "https://github.com/spindemo/deploy-manifest.git"
                     sh "git clone ${deployCloneUrl}"
@@ -55,7 +55,7 @@ spec:
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/staging/oregon/heroku.json']).trim()
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/production/oregon/heroku.json']).trim()
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
-                    sh "entrypoint slug_create --app-names pmedapuram-debug-jdk --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
+                    sh "entrypoint slug_create --app-names pmedapuram-debug-jdk --token ${env.HEROKU_KEY} --git-commit ${commit} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
                     //sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/production/oregon"
 
                     def netrcPath='~/.netrc'
