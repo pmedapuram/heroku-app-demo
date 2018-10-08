@@ -17,7 +17,7 @@ spec:
     - cat
     tty: true
   - name: dev-heroku
-    image: gcr.io/core-1-190918/heroku-app-demo:debug
+    image: gcr.io/core-1-190918/heroku-app-demo:debug-jdk
     command:
     - cat
     tty: true
