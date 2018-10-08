@@ -55,6 +55,7 @@ spec:
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/staging/oregon/heroku.json']).trim()
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/production/oregon/heroku.json']).trim()
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
+                    sh 'cd app && ls -ltra .'
                     sh "entrypoint slug_create --app-names pmedapuram-debug-jdk --token ${env.HEROKU_KEY} --git-commit ${commit} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
                     //sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/production/oregon"
 
