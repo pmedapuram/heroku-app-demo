@@ -48,6 +48,7 @@ spec:
               script {
 
                 def commit = sh([returnStdout: true, script: 'git rev-parse --short HEAD']).trim()
+                sh 'chown -R root:root ./*'
                 sh 'entrypoint slug_add_artifacts target/java-getting-started-1.0.jar'
                 def deployCloneUrl = "https://github.com/spindemo/deploy-manifest.git"
                     sh "git clone ${deployCloneUrl}"
