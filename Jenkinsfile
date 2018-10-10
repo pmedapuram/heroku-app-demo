@@ -55,14 +55,15 @@ spec:
                 script {
                     //def timestamp = sh([returnStdout: true, script: "date +%s"]).trim()
                     //def branchName = "Deployment_${timestamp}"
+                    def commit = sh([returnStdout: true, script: 'git rev-parse --short HEAD']).trim()
                     def deployCloneUrl = "https://github.com/spindemo/deploy-manifest.git"
                     sh "git clone ${deployCloneUrl}"
                     def appNames = []
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/staging/oregon/heroku.json']).trim()
                     appNames << sh([returnStdout: true, script: 'jq \'.app_name\' deploy-manifest/heroku-app-demo/production/oregon/heroku.json']).trim()
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
-                    sh "entrypoint slug_create --app-names ${appNames[0]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
-                    sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/production/oregon"
+                    sh "entrypoint slug_create --app-names ${appNames[0]} --token ${env.HEROKU_KEY} --git-commit ${commit} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
+                    sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --git-commit ${commit} --deploy-dir deploy-manifest/heroku-app-demo/production/oregon"
                     //sh "git commit -am 'modify slug-id'"
                     //sh "git checkout -b ${branchName} && git push origin ${branchName}"
                     //sh "/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} --org pmedapuram --repo heroku-app-demo --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\""
