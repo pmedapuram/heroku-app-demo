@@ -49,7 +49,6 @@ spec:
     stage('Slug create') {
         environment {
             HEROKU_KEY = credentials('pavan-heroku-token')
-            GITHUB = credentials('pavan-github-token')
         }
         steps{
             container('dev-heroku') {
@@ -64,21 +63,6 @@ spec:
                     echo "The appNames are ${appNames[0]} and ${appNames[1]}"
                     sh "entrypoint slug_create --app-names ${appNames[0]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/staging/oregon"
                     sh "entrypoint slug_create --app-names ${appNames[1]} --token ${env.HEROKU_KEY} --deploy-dir deploy-manifest/heroku-app-demo/production/oregon"
-
-                    def netrcPath='~/.netrc'
-
-                    sh """
-                          echo '\nmachine github.com' >> ${netrcPath}
-                          echo 'login ${env.GITHUB_USR}' >> ${netrcPath}
-                          echo 'password ${env.GITHUB_PSW}' >> ${netrcPath}
-                    """
-                    sh "git config --global user.name ${env.GITHUB_USR}"
-                    sh "git config --global user.email pmedapuram@salesforce.com"
-
-                    dir('deploy-manifest') {
-                        sh "git commit -am 'intiate deployment'"
-                        sh "git push origin master"
-                    }
                     //sh "git commit -am 'modify slug-id'"
                     //sh "git checkout -b ${branchName} && git push origin ${branchName}"
                     //sh "/var/lib/heroku/ci/create_pull_request --token ${env.GITHUB_PSW} --org pmedapuram --repo heroku-app-demo --base add-pipeline --head ${branchName} --title \"Deployment of Heroku App\" --body \"Time to deploy!\""
@@ -90,6 +74,7 @@ spec:
     stage('Slug Upload') {
         environment {
             HEROKU_API_KEY = credentials('pavan-heroku-token')
+            GITHUB = credentials('pavan-github-token')
         }
         steps{
             container('dev-heroku') {
@@ -126,6 +111,21 @@ spec:
                         --data-binary @${tarball} \
                         -n "${slugUploadUrl}"
                         """
+
+                        def netrcPath='~/.netrc'
+
+                        sh """
+                              echo '\nmachine github.com' >> ${netrcPath}
+                              echo 'login ${env.GITHUB_USR}' >> ${netrcPath}
+                              echo 'password ${env.GITHUB_PSW}' >> ${netrcPath}
+                        """
+                        sh "git config --global user.name ${env.GITHUB_USR}"
+                        sh "git config --global user.email pmedapuram@salesforce.com"
+
+                        dir('deploy-manifest') {
+                            sh "git commit -am 'intiate deployment'"
+                            sh "git push origin master"
+                        }
                 }
             }
 
